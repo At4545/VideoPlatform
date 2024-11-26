@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {  userRegister,userLogin, userLogout,refreshAccessToken,changeCurrentPassword,getCurrentUser,updateAccountDetails,updateUserAvatar,updateUserCoverImage,  getUserChannelProfile,
-    getWatchHistory} from "../controllers/user.controller.js";
+    getWatchHistory,
+    validateEmailOrUserName} from "../controllers/user.controller.js";
 import {upload} from "../middlewares/multer.middleware.js"
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -35,6 +36,7 @@ router.route("/update-cover").patch(verifyJWT,upload.single("coverImage"),update
 router.route("/c/:userName").get(verifyJWT,getUserChannelProfile)
 // to be tested it later when user will watch some constent
 router.route("/history").get(verifyJWT,getWatchHistory)
+router.route("/check/:id").get(validateEmailOrUserName)
 
 
 

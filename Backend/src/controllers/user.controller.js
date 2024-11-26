@@ -5,6 +5,7 @@ import {User} from "../modals/user.modal.js"
 import {deleteFileOnCloudinary, uploadFileOnCloudinary} from "../utils/cloudnary.js"
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import { response } from "express";
 
 const generateAccessAndRefreshToken= async(_id)=>{
     const user = await User.findById(_id)
@@ -23,7 +24,7 @@ const userRegister= asyncHandler(async(req,res)=>{
 
     if( 
         [fullName, userName , email ,password].some((feild)=> feild.trim() === "")){
-        throw new ApiError(400, "fullName, userName , email ,password are required")
+        throw new ApiError(401, "fullName, userName , email ,password are required")
     }
 
    const existedUser= await User.findOne({
@@ -31,7 +32,7 @@ const userRegister= asyncHandler(async(req,res)=>{
     })
 
     if(existedUser){
-        throw new ApiError(400, "User Already existed")
+        throw new ApiError(402, "User Already existed")
     }
 
     const avatarLocalPath= req.files?.avatar[0]?.path
@@ -43,7 +44,7 @@ const userRegister= asyncHandler(async(req,res)=>{
 
 
     if(!avatarLocalPath){
-        throw new ApiError(400, "Avatar is mandatory")
+        throw new ApiError(403, "Avatar is mandatory")
     }
      
     const avatar=await uploadFileOnCloudinary(avatarLocalPath)//avatar.url that what we needs
@@ -484,6 +485,22 @@ const getWatchHistory = asyncHandler(async(req, res) => {
         new ApiResponse(200,user[0],"watch history successfully fetched!!")
     )
 })
+
+// check if userName or email existed 
+const validateEmailOrUserName=asyncHandler(async(req,res)=>{
+    const id= req.params.id
+    const isEmail =id?.includes("@")
+    var response
+    if(isEmail){
+     response=await User.countDocuments({email:id})
+    }
+    else{
+     response=await User.countDocuments({userName:id})
+    }
+    res.status(200).json(
+        new ApiResponse(200,response,"validateEmailOrUsername")
+    )
+})
 export {
     userRegister,
     userLogin,
@@ -495,5 +512,6 @@ export {
     updateUserAvatar,
     updateUserCoverImage,
     getUserChannelProfile,
-    getWatchHistory
+    getWatchHistory,
+    validateEmailOrUserName
 }
