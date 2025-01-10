@@ -5,7 +5,7 @@ import { useSelector } from "react-redux"
 function Header() {
   const avatar = useSelector((state)=>state.auth.userData?.user.avatar.url || null)
   return (
-    <header className='flex border-b py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50 justify-between'>
+    <header className='flex border-b py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-auto justify-between'>
     <div className='flex flex-wrap items-center gap-5 w-full'>
       <a href="javascript:void(0)"><img className='h-16' src={logo} alt="logo" />
       </a>

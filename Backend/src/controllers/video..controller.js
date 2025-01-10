@@ -6,32 +6,80 @@ import {ApiResponse} from "../utils/ApiResponse.js"
 import {asyncHandler} from "../utils/ayncHandler.js"
 import fs from "fs"
 import {uploadFileOnCloudinary, deleteFileOnCloudinary } from "../utils/cloudnary.js"
+import { title } from "process"
 
 
 const getAllVideos = asyncHandler(async (req, res) => {
     const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query
+    
+    let response
     //TODO: get all videos based on query, sort, pagination
-    const response = await Comment.aggregate([
-       
-        {
-            $search: {
-                index: 'default', // Specify the name of your search index
-                text: {
-                  query: query,
-                  path: ['title', 'description'], // Fields to search in
-                  fuzzy: { maxEdits: 3 } // Optional: Allows for fuzzy search
+   //need to imporve this
+    if(!query){
+
+         response = await Video.aggregate([
+            {
+                $lookup:{
+                    from:"users",
+                    localField:"owner",
+                    foreignField:"_id",
+                    as:"owner",
+                    pipeline:[
+                        {
+                            $project:{
+                                userName:1,
+                                avatar:1,
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $unwind:"$owner"
+            }
+         ])
+    }else{
+         response = await Video.aggregate([
+            {
+                $match: {
+                    $or: [
+                        { title: { $regex: query, $options: "i" } },
+                        { description: { $regex: query, $options: "i" } },
+                    ],
+                },
+            },
+            {
+                $skip:Number( (parseInt(page)-1) * parseInt(limit))
+            },
+            {
+                $limit:  Number(parseInt(limit))
+            },
+            {
+                $lookup:{
+                    from:"users",
+                    localField:"owner",
+                    foreignField:"_id",
+                    as:"owner",
+                    pipeline:[
+                        {
+                            $project:{
+                                userName:1,
+                                avatar:1,
+                            }
+                        }
+                    ]
                 }
             }
-        },
-        
-        {
-            $skip:Number( (page-1) * limit)
-        },
-        {
-            $limit:  Number(limit)
-        },
-        
-    ])
+         ])
+    }
+    if(!response){
+        throw new ApiError(400,"something went wrong")
+    }
+    res.status(200).json(
+        new ApiResponse(200,response,"videos fetched successfully")
+    )
+
+
 })
 
 const publishAVideo = asyncHandler(async (req, res) => {

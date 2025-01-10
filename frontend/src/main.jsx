@@ -10,7 +10,8 @@ import {
     createBrowserRouter,
     RouterProvider,
   } from "react-router-dom";
-import {Dashboard, Login,SignUp} from "./Components/index.js"
+import {Home, Login,SignUp,Dashboard,VIdeoPlayerComponent} from "./Components/index.js"
+
 
   const router = createBrowserRouter([
   {
@@ -19,7 +20,7 @@ import {Dashboard, Login,SignUp} from "./Components/index.js"
     children:[
         {
             path:"/",
-            element:<Dashboard/>
+            element:<Home/>
         },
         {
             path:"/login",
@@ -28,6 +29,14 @@ import {Dashboard, Login,SignUp} from "./Components/index.js"
         {
             path:"/register",
             element:<SignUp/>
+        },
+        {
+            path:"/:id",
+            element:<VIdeoPlayerComponent/>
+        },
+        {
+            path:"/you",
+            element:<Dashboard/>
         },
     ]
   },

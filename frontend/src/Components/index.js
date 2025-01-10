@@ -6,8 +6,10 @@ import UploadInput from "./UploadInput/UploadInput"
 import Label from "./Label/Label"
 import Header from "./Header/Header"
 import DropDown from "./DropDown/DropDown"
-import Dashboard from "./Dashboard/Dashboard"
+import Home from "./Home/Home"
 import VideoCard from "./VideoCard/VideoCard"
+import Dashboard from "./dashboard/Dashboard"
+import VIdeoPlayerComponent from "./VideoPlayerComponent/VIdeoPlayerComponent"
 export  {
     Login,
     SignUp,
@@ -17,6 +19,8 @@ export  {
     Label,
     Header,
     DropDown,
+    Home,
+    VideoCard,
     Dashboard,
-    VideoCard
+    VIdeoPlayerComponent
 }

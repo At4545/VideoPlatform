@@ -7,7 +7,7 @@ import defaulCoverImage from "../../assets/DefaultCoverImage.png";
 import UploadInput from "../UploadInput/UploadInput";
 import { useRef } from "react";
 import { useEffect, useState } from "react";
-import AuthService from "../../auth/auth";
+import AuthService from "../../Apis/auth";
 import axios from "axios";
 import { login } from "../../redux/authSlice";
 import { useDispatch } from "react-redux";

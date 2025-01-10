@@ -3,7 +3,7 @@ import Input from '../Input/Input.jsx'
 import logo from "../../assets/logo.png"
 import Button from '../Button/Button.jsx'
 import { useForm } from "react-hook-form"
-import AuthService from '../../auth/auth.jsx'
+import AuthService from '../../Apis/auth.jsx'
 import { useState } from 'react'
 import {login} from "../../redux/authSlice.jsx"
 import {useDispatch} from "react-redux"
